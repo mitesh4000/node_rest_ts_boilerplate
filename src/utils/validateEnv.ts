@@ -26,5 +26,12 @@ const envSchema = z.object({
 });
 
 export const validateEnv = () => {
-  envSchema.parse(process.env);
+  try {
+    envSchema.parse(process.env);
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      console.log(error.errors);
+      throw new Error("ENV variable validation failed");
+    }
+  }
 };
