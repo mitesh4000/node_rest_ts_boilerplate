@@ -64,4 +64,13 @@ Additional Notes
 - Use MongoDB as the database.
 - Ensure proper error handling and validation for all API endpoints.
 - Use environment variables to store sensitive information like database credentials and JWT secret.
-- Document the API endpoints and provide sample requests and responses.
+- Document the API endpoints and provide sample requests and responses.a
+
+
+
+
+
+TODO
+
+
+[] fix validation of add contracts

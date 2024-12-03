@@ -21,9 +21,11 @@ const contractSchema = new Schema<IContract>(
     contractName: { type: String, unique: true, required: true, minlength: 2 },
     clientId: {
       type: mongoose.Schema.ObjectId,
+      ref: "User",
       required: true,
     },
     freelancerId: {
+      ref: "User",
       type: mongoose.Schema.ObjectId,
       required: true,
     },

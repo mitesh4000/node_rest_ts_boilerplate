@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contract Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <div class="flex h-screen">
+        <!-- Sidebar / Navbar -->
+        <nav class="w-64 bg-white shadow-lg">
+            <div class="p-4">
+                <h1 class="text-2xl font-bold text-gray-800">Dashboard</h1>
+            </div>
+            <ul class="space-y-2 p-4">
+                <li>
+                    <a href="#" class="flex items-center space-x-2 text-gray-700 hover:text-blue-500 hover:bg-gray-100 p-2 rounded-md">
+                        <i class="fas fa-tachometer-alt w-5 h-5"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="flex items-center space-x-2 text-gray-700 hover:text-blue-500 hover:bg-gray-100 p-2 rounded-md">
+                        <i class="fas fa-user w-5 h-5"></i>
+                        <span>Profile</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="flex items-center space-x-2 text-gray-700 hover:text-blue-500 hover:bg-gray-100 p-2 rounded-md">
+                        <i class="fab fa-github w-5 h-5"></i>
+                        <span>GitHub</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="flex-1 overflow-y-auto p-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Active Contracts</h2>
+            <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                <!-- Contract Card 1 -->
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Website Redesign</h3>
+                    <p class="text-gray-600"><span class="font-medium">Freelancer:</span> John Doe</p>
+                    <p class="text-gray-600"><span class="font-medium">Start Date:</span> 2023-06-01</p>
+                    <p class="text-gray-600"><span class="font-medium">End Date:</span> 2023-08-31</p>
+                </div>
+
+                <!-- Contract Card 2 -->
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Mobile App Development</h3>
+                    <p class="text-gray-600"><span class="font-medium">Freelancer:</span> Jane Smith</p>
+                    <p class="text-gray-600"><span class="font-medium">Start Date:</span> 2023-07-15</p>
+                    <p class="text-gray-600"><span class="font-medium">End Date:</span> 2023-12-31</p>
+                </div>
+
+                <!-- Contract Card 3 -->
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">SEO Optimization</h3>
+                    <p class="text-gray-600"><span class="font-medium">Freelancer:</span> Mike Johnson</p>
+                    <p class="text-gray-600"><span class="font-medium">Start Date:</span> 2023-08-01</p>
+                    <p class="text-gray-600"><span class="font-medium">End Date:</span> 2023-10-31</p>
+                </div>
+
+                <!-- Contract Card 4 -->
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Content Writing</h3>
+                    <p class="text-gray-600"><span class="font-medium">Freelancer:</span> Sarah Brown</p>
+                    <p class="text-gray-600"><span class="font-medium">Start Date:</span> 2023-09-01</p>
+                    <p class="text-gray-600"><span class="font-medium">End Date:</span> 2023-11-30</p>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { object, z } from "zod";
-import contractModel from "../model/contract.model";
+import contractModel from "./model/contract.model";
 
 const getAllContracts = async (
   req: Request,
@@ -72,32 +72,16 @@ const addContract = async (req: Request, res: Response, next: NextFunction) => {
       contractName: z
         .string()
         .min(3, "name is too short need atleast 3 charactors"),
-      // clientId: z.instanceof(mongoose.Types.ObjectId),
-      // freelancerId: z
-      //   .instanceof(mongoose.Types.ObjectId)
-      //   .refine((id) => id.toString().length === 24, {
-      //     message: "invalid client Id",
-      //   }),
-      // startDate: z
-      //   .date({
-      //     required_error: "Please select a date and time",
-      //     invalid_type_error: "That's not a date!",
-      //   })
-      //   .min(new Date(), { message: "contracts can only start in future" }),
-      // endDate: z
-      //   .date({
-      //     required_error: "Please select a date and time",
-      //     invalid_type_error: "That's not a date!",
-      //   })
-      //   .min(new Date(), { message: "no contracts can end just tommorow" }),
-      // }).superRefine(({ startDate, endDate }, ctx) => {
-      //   if (startDate > endDate) {
-      //     ctx.addIssue({
-      //       code: "custom",
-      //       message: "End date must be after start date",
-      //       path: ["endDate"],
-      //     });
-      //   }
+      startDate: z.string().date(),
+      endDate: z.string().date(),
+    }).superRefine(({ startDate, endDate }, ctx) => {
+      if (startDate > endDate) {
+        ctx.addIssue({
+          code: "custom",
+          message: "End date must be after start date",
+          path: ["endDate"],
+        });
+      }
     });
     console.log(req.body);
     contractSchema.parse(req.body);
@@ -107,7 +91,9 @@ const addContract = async (req: Request, res: Response, next: NextFunction) => {
     if (error instanceof z.ZodError) {
       return res.status(400).json({
         error: "Validation failed",
-        issues: error.errors?.map((item, index) => item.message),
+        issues: error.errors?.map(
+          (item, index) => `${item.path[0]} - ${item.message}`
+        ),
       });
     }
     console.error(error);

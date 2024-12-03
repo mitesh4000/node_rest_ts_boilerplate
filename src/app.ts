@@ -1,34 +1,31 @@
 import dotenv from "dotenv";
 import express, { Application } from "express";
-import { login, register } from "./controller/auth.controller";
-import {
-  addContract,
-  getUsersContracts,
-} from "./controller/contract.controller";
-import { getAllUsers } from "./controller/user.controller";
-import authMiddleware from "./middleware/auth.middleware";
+import morgan from "morgan";
+import { serverStatus } from "./controller/view.controller";
+import authRoutes from "./routes/auth.routes";
+import contractRoutes from "./routes/contract.routes";
+import milestoneRoutes from "./routes/milestone.routes";
+import userRoutes from "./routes/user.routes";
+import swaggerDocs from "./swagger";
 import { connectToDatabase } from "./utils/connectToDb";
 import { validateEnv } from "./utils/validateEnv";
 
 dotenv.config();
 
 const app: Application = express();
+const port = process.env.PORT;
 validateEnv();
 connectToDatabase();
-
+app.use(morgan("tiny"));
 app.use(express.json());
-app.post("/register", register);
-app.post("/login", login);
 
-app.use(authMiddleware);
-// app.get("/contracts", login);
+swaggerDocs(app, Number(port));
 
-app.post("/contract", addContract);
-// app.get("/contract", getAllContracts);
-app.get("/contract", getUsersContracts);
-app.get("/user", getAllUsers);
-
-const port = process.env.PORT;
+app.get("/", serverStatus);
+app.use("/auth", authRoutes);
+app.use("/user", userRoutes);
+app.use("/contract", contractRoutes);
+app.use("/", milestoneRoutes);
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
