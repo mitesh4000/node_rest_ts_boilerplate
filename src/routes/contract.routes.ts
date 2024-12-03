@@ -7,7 +7,6 @@ import {
 import authMiddleware from "../middleware/auth.middleware";
 
 const router = Router();
-
 router.post("/", authMiddleware, addContract);
 router.get("/all", authMiddleware, getAllContracts);
 router.get("/", authMiddleware, getUsersContracts);

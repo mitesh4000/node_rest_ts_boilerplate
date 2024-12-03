@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npx tsc",
     "start": "node dist/app.js",
-    "dev": "nodemon  src/app.ts"
+    "dev": "nodemon  src/app.ts",
+    "swagger":"node ./src/swagger.js"
   },
   "repository": {
     "type": "git",
@@ -46,6 +47,7 @@
     "@types/ws": "^8.5.13",
     "concurrently": "^9.1.0",
     "nodemon": "^3.1.7",
+    "swagger-autogen": "^2.23.7",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
     "ts-node": "^10.9.2",

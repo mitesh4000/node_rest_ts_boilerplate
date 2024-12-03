@@ -7,10 +7,11 @@ import contractRoutes from "./routes/contract.routes";
 import milestoneRoutes from "./routes/milestone.routes";
 import projectRoutes from "./routes/project.routes";
 import userRoutes from "./routes/user.routes";
-import swaggerDocs from "./swagger";
+// import swaggerDocs from "./swagger";
 import { connectToDatabase } from "./utils/connectToDb";
 import { validateEnv } from "./utils/validateEnv";
-
+const swaggerUi = require("swagger-ui-express");
+const swaggerFile = require("./swagger-output.json");
 dotenv.config();
 
 const app: Application = express();
@@ -20,13 +21,15 @@ connectToDatabase();
 app.use(morgan("tiny"));
 app.use(express.json());
 
+app.use("/doc", swaggerUi.serve, swaggerUi.setup(swaggerFile));
+
 app.get("/", serverStatus);
 app.use("/auth", authRoutes);
 app.use("/user", userRoutes);
 app.use("/contract", contractRoutes);
 app.use("/", milestoneRoutes);
 app.use("/", projectRoutes);
-swaggerDocs(app, Number(port));
+// swaggerDocs(app, Number(port));
 
 app.use((req, res) => {
   res.status(404).json({ error: "Route not found" });

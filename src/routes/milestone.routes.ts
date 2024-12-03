@@ -5,7 +5,6 @@ import {
 } from "../controller/milestone.controller";
 
 const router = Router();
-
 router.post("/contracts/:contractId/milestones", createMilestone);
 router.get("/contracts/:contractId/milestones", getMilestones);
 
