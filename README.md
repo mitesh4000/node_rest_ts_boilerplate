@@ -28,6 +28,7 @@ Swagger Documentation
 To access the Swagger documentation, visit the provided base URL:
 
 - Base URL: [BASE_url]:[PORT_NUMBER]/docs
+![image](https://github.com/user-attachments/assets/96cd58bc-d439-439a-8aea-4ed6c141dbb6)
 
 Error Handling
 --------------
