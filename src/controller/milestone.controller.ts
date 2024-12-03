@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { z } from "zod";
 import contractModel from "../model/contract.model";
 import milestoneModel from "../model/milestone.model";
 
@@ -35,7 +36,17 @@ export const createMilestone = async (req: Request, res: Response) => {
 
     return res.status(201).json(newMilestone);
   } catch (error) {
+    if (error instanceof z.ZodError) {
+      return res.status(400).json({
+        error: "Validation failed",
+        issues: error.errors?.map(
+          (item, index) => `${item.path[0]} - ${item.message}`
+        ),
+      });
+    }
     console.error(error);
-    return res.status(500).json({ message: "Server error" });
+    const errorMessage =
+      error instanceof Error ? error.message : "An unexpected error occurred";
+    return res.status(500).json({ error: errorMessage });
   }
 };

@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 interface DecodedToken {
-  _id: string;
+  id: string;
 }
 const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -25,10 +25,12 @@ const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
       return res.status(401).json({ message: "Unable to decode Token" });
     }
     // @ts-ignore
-    req.userId = decoded.Id;
+    console.log(decoded, decoded.id);
+    // @ts-ignore
+    req.userId = decoded.id;
+
     next();
   } catch (err) {
-    console.error(err);
     return res.status(403).json({ message: "Invalid token" });
   }
 };

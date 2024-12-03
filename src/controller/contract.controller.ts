@@ -1,6 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import { object, z } from "zod";
-import contractModel from "./model/contract.model";
+import contractModel from "../model/contract.model";
+import userModal from "../model/user.model";
+import { authRequest } from "../types/authRequest";
 
 const getAllContracts = async (
   req: Request,
@@ -29,22 +31,20 @@ const getAllContracts = async (
   }
 };
 
-interface customRequest extends Request {
-  user?: { id: string };
-}
 const getUsersContracts = async (
-  req: customRequest,
+  req: authRequest,
   res: Response
 ): Promise<Response> => {
   try {
-    const userId = req.user?.id;
+    const userId = req.userId;
+    console.log(userId);
     if (!userId) {
       return res.status(404).json({
         message: "Authentication Error",
       });
     }
     const allcontracts = await contractModel.find({
-      _id: userId,
+      freelancerId: userId,
     });
 
     if (allcontracts.length === 0) {
@@ -55,9 +55,7 @@ const getUsersContracts = async (
     }
 
     return res.status(200).json({
-      message: "contracts fetched successfully",
       data: allcontracts,
-      totalCount: allcontracts.length,
     });
   } catch (error) {
     return res.status(500).json({
@@ -67,15 +65,35 @@ const getUsersContracts = async (
   }
 };
 const addContract = async (req: Request, res: Response, next: NextFunction) => {
+  const { clientId, freelancerId } = req.body;
   try {
+    const client = await userModal.findById(clientId);
+    if (!client) {
+      return res.status(404).json({ message: "client not found" });
+    }
+
+    const freelancer = await userModal.findById(freelancerId);
+    if (!freelancer) {
+      return res.status(404).json({ message: "freelencer  not found" });
+    }
     const contractSchema = object({
       contractName: z
         .string()
         .min(3, "name is too short need atleast 3 charactors"),
-      startDate: z.string().date(),
-      endDate: z.string().date(),
+      startDate: z
+        .string()
+        .date()
+        .refine((date) => new Date(date) > new Date(), {
+          message: "Contracts can only start in the future",
+        }),
+      endDate: z
+        .string()
+        .date()
+        .refine((date) => new Date(date) > new Date(), {
+          message: "No contracts can end just tomorrow",
+        }),
     }).superRefine(({ startDate, endDate }, ctx) => {
-      if (startDate > endDate) {
+      if (new Date(startDate) > new Date(endDate)) {
         ctx.addIssue({
           code: "custom",
           message: "End date must be after start date",

@@ -5,6 +5,7 @@ import { serverStatus } from "./controller/view.controller";
 import authRoutes from "./routes/auth.routes";
 import contractRoutes from "./routes/contract.routes";
 import milestoneRoutes from "./routes/milestone.routes";
+import projectRoutes from "./routes/project.routes";
 import userRoutes from "./routes/user.routes";
 import swaggerDocs from "./swagger";
 import { connectToDatabase } from "./utils/connectToDb";
@@ -26,6 +27,7 @@ app.use("/auth", authRoutes);
 app.use("/user", userRoutes);
 app.use("/contract", contractRoutes);
 app.use("/", milestoneRoutes);
+app.use("/", projectRoutes);
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });

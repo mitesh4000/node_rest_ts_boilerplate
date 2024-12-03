@@ -54,7 +54,9 @@ export const register = async (
     if (error instanceof z.ZodError) {
       return res.status(400).json({
         error: "Validation failed",
-        issues: error.errors?.map((item, index) => item.message),
+        issues: error.errors?.map(
+          (item, index) => `${item.path[0]} - ${item.message}`
+        ),
       });
     }
     console.error(error);

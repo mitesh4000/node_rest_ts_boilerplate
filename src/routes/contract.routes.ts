@@ -3,7 +3,7 @@ import {
   addContract,
   getAllContracts,
   getUsersContracts,
-} from "../contract.controller";
+} from "../controller/contract.controller";
 import authMiddleware from "../middleware/auth.middleware";
 
 const router = Router();

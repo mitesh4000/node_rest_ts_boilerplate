@@ -74,3 +74,4 @@ TODO
 
 
 [] fix validation of add contracts
+[] validating token for expiry and validity
