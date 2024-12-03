@@ -28,6 +28,11 @@ app.use("/user", userRoutes);
 app.use("/contract", contractRoutes);
 app.use("/", milestoneRoutes);
 app.use("/", projectRoutes);
+
+app.use((req, res) => {
+  res.status(404).json({ error: "Route not found" });
+});
+
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });

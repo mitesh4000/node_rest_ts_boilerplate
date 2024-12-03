@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import { z } from "zod";
 import userModal, { IUserFatchResponse } from "../model/user.model";
 import { comparePassword, hashPassword } from "../utils/auth";
+import { userValidation } from "../utils/validationSchemas";
 
 export const register = async (
   req: Request,
@@ -10,30 +11,6 @@ export const register = async (
 ): Promise<Response> => {
   try {
     const { userName, email, password, confirmPassword } = req.body;
-
-    const userValidation = z
-      .object({
-        userName: z
-          .string()
-          .min(2, { message: "Name must be at least 2 characters" }),
-        email: z.string().email("Please provide a valid email"),
-        password: z
-          .string()
-          .min(6, "Password must be at least 6 characters")
-          .max(100, "passwords can not be that long"),
-        confirmPassword: z
-          .string()
-          .min(6, "Confirm Password must be at least 6 characters"),
-      })
-      .superRefine(({ confirmPassword, password }, ctx) => {
-        if (confirmPassword !== password) {
-          ctx.addIssue({
-            code: "custom",
-            message: "The passwords did not match",
-            path: ["confirmPassword"],
-          });
-        }
-      });
 
     userValidation.parse(req.body);
 

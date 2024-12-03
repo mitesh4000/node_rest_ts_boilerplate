@@ -3,37 +3,7 @@ import { z } from "zod";
 import Contract from "../model/contract.model"; // Assuming you have a Contract model
 import Project from "../model/project.model";
 import { authRequest } from "../types/authRequest";
-
-const projectSchema = z
-  .object({
-    projectName: z
-      .string()
-      .min(3, "Project name must be at least 3 characters long"),
-    description: z
-      .string()
-      .min(10, "Description must be at least 10 characters long"),
-    startDate: z
-      .string()
-      .date()
-      .refine((date) => new Date(date) > new Date(), {
-        message: "Contracts can only start in the future",
-      }),
-    endDate: z
-      .string()
-      .date()
-      .refine((date) => new Date(date) > new Date(), {
-        message: "No contracts can end just tomorrow",
-      }),
-  })
-  .superRefine(({ startDate, endDate }, ctx) => {
-    if (new Date(startDate) > new Date(endDate)) {
-      ctx.addIssue({
-        code: "custom",
-        message: "End date must be after start date",
-        path: ["endDate"],
-      });
-    }
-  });
+import { projectSchema } from "../utils/validationSchemas";
 
 export const createProject = async (req: Request, res: Response) => {
   try {
@@ -42,7 +12,7 @@ export const createProject = async (req: Request, res: Response) => {
     if (!contract) {
       return res.status(404).json({ message: "Contract not found" });
     }
-
+    console.log(req.body);
     const validatedData = projectSchema.parse(req.body);
     const newProject = new Project(validatedData);
     await newProject.save();
@@ -69,7 +39,7 @@ export const listProjects = async (req: authRequest, res: Response) => {
   try {
     const projects = await Project.find({
       $or: [{ clientId: userId }, { freelancerId: userId }],
-    }).populate("contractId");
+    });
 
     return res.status(200).json(projects);
   } catch (error) {

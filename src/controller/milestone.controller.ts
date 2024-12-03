@@ -50,3 +50,24 @@ export const createMilestone = async (req: Request, res: Response) => {
     return res.status(500).json({ error: errorMessage });
   }
 };
+
+export const getMilestones = async (req: Request, res: Response) => {
+  const { contractId } = req.params;
+
+  try {
+    const milestones = await milestoneModel.find({ contractId });
+
+    if (milestones.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No milestones found for this contract" });
+    }
+
+    return res.status(200).json(milestones);
+  } catch (error) {
+    console.error(error);
+    const errorMessage =
+      error instanceof Error ? error.message : "An unexpected error occurred";
+    return res.status(500).json({ error: errorMessage });
+  }
+};

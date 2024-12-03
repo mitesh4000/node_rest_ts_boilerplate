@@ -1,8 +1,9 @@
 import { NextFunction, Request, Response } from "express";
-import { object, z } from "zod";
+import { z } from "zod";
 import contractModel from "../model/contract.model";
 import userModal from "../model/user.model";
 import { authRequest } from "../types/authRequest";
+import { contractSchema } from "../utils/validationSchemas";
 
 const getAllContracts = async (
   req: Request,
@@ -44,7 +45,7 @@ const getUsersContracts = async (
       });
     }
     const allcontracts = await contractModel.find({
-      freelancerId: userId,
+      $or: [{ clientId: userId }, { freelancerId: userId }],
     });
 
     if (allcontracts.length === 0) {
@@ -76,31 +77,6 @@ const addContract = async (req: Request, res: Response, next: NextFunction) => {
     if (!freelancer) {
       return res.status(404).json({ message: "freelencer  not found" });
     }
-    const contractSchema = object({
-      contractName: z
-        .string()
-        .min(3, "name is too short need atleast 3 charactors"),
-      startDate: z
-        .string()
-        .date()
-        .refine((date) => new Date(date) > new Date(), {
-          message: "Contracts can only start in the future",
-        }),
-      endDate: z
-        .string()
-        .date()
-        .refine((date) => new Date(date) > new Date(), {
-          message: "No contracts can end just tomorrow",
-        }),
-    }).superRefine(({ startDate, endDate }, ctx) => {
-      if (new Date(startDate) > new Date(endDate)) {
-        ctx.addIssue({
-          code: "custom",
-          message: "End date must be after start date",
-          path: ["endDate"],
-        });
-      }
-    });
     console.log(req.body);
     contractSchema.parse(req.body);
     const contract = await contractModel.create(req.body);
