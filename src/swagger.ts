@@ -8,11 +8,6 @@ const options = {
     info: {
       title: "Mitesh Maurya's assignment",
       description: "API endpoints for a Assignment",
-      contact: {
-        name: "Desmond Obisi",
-        email: "info@miniblog.com",
-        url: "https://github.com/DesmondSanctity/node-js-swagger",
-      },
       version: "1.0.0",
     },
     servers: [
@@ -26,7 +21,7 @@ const options = {
       },
     ],
   },
-  apis: ["./router/*.ts"],
+  apis: ["./routes/*.ts"],
 };
 
 const swaggerSpec = swaggerJsdoc(options);

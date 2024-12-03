@@ -20,14 +20,13 @@ connectToDatabase();
 app.use(morgan("tiny"));
 app.use(express.json());
 
-swaggerDocs(app, Number(port));
-
 app.get("/", serverStatus);
 app.use("/auth", authRoutes);
 app.use("/user", userRoutes);
 app.use("/contract", contractRoutes);
 app.use("/", milestoneRoutes);
 app.use("/", projectRoutes);
+swaggerDocs(app, Number(port));
 
 app.use((req, res) => {
   res.status(404).json({ error: "Route not found" });

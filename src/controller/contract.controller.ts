@@ -77,7 +77,6 @@ const addContract = async (req: Request, res: Response, next: NextFunction) => {
     if (!freelancer) {
       return res.status(404).json({ message: "freelencer  not found" });
     }
-    console.log(req.body);
     contractSchema.parse(req.body);
     const contract = await contractModel.create(req.body);
     return res.status(201).json({ data: contract });
