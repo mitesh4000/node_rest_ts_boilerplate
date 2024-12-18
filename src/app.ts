@@ -8,19 +8,25 @@ import milestoneRoutes from "./routes/milestone.routes";
 import projectRoutes from "./routes/project.routes";
 import userRoutes from "./routes/user.routes";
 // import swaggerDocs from "./swagger";
+import { createServer } from "http";
+import path from "path";
+import { Server } from "socket.io";
 import { connectToDatabase } from "./utils/connectToDb";
 import { validateEnv } from "./utils/validateEnv";
+
 const swaggerUi = require("swagger-ui-express");
 const swaggerFile = require("./swagger-output.json");
 dotenv.config();
 
 const app: Application = express();
+const server = createServer(app);
+const io = new Server(server);
 const port = process.env.PORT;
 validateEnv();
 connectToDatabase();
 app.use(morgan("tiny"));
 app.use(express.json());
-
+app.use(express.static(path.resolve("./src/public")));
 app.use("/doc", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 app.get("/", serverStatus);
