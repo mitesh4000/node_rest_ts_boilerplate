@@ -12,19 +12,12 @@ const getAllContracts = async (
   res: Response
 ): Promise<Response> => {
   try {
-    const allcontracts = await contractModel.find();
-
-    if (allcontracts.length === 0) {
-      return res.status(404).json({
-        message: "No contracts found",
-        data: [],
-      });
-    }
+    const allcontracts = await contractModel.findById(
+      "67640e5d77362d1b45210f16"
+    );
 
     return res.status(200).json({
-      message: "contracts fetched successfully",
       data: allcontracts,
-      totalCount: allcontracts.length,
     });
   } catch (error) {
     return res.status(500).json({
@@ -108,7 +101,7 @@ const genContractAi = async (req: Request, res: Response) => {
     }
 
     const ollama = new ChatOllama({
-      model: "llama3.1:8b",
+      model: "phi3.5:latest",
       baseUrl: "http://localhost:11434",
     });
 
@@ -132,11 +125,12 @@ const genContractAi = async (req: Request, res: Response) => {
       contractDescription: z
         .string()
         .min(10)
-        .max(500)
         .describe("Detailed description of the contract"),
     });
     const parser = StructuredOutputParser.fromZodSchema(contractSchema);
     const prompt = PromptTemplate.fromTemplate(`
+
+      CRITICAL INSTRUCTIONS FOR JSON GENERATION:
       Based on the description: "${description}", 
       generate a contract with following requirements:
       
@@ -144,17 +138,22 @@ const genContractAi = async (req: Request, res: Response) => {
       2. Ensure budget is reasonable
       3. Set appropriate contract duration
       4. Define sensible number of revisions
+      5. Ensure contract name is unique
+      6. Ensure contract description is clear
+      
+      CRITICAL: 
+      - Respond ONLY with VALID JSON
+      - Use EXACT schema format
+      - NO additional commentary
+      \n{format_instructions}
 
-      {format_instructions}
 
-      please provide pure json result
     `);
 
     const chain = prompt.pipe(ollama).pipe(parser);
 
     console.log(parser.getFormatInstructions());
     const llmResponse = await chain.invoke({
-      description: description,
       format_instructions: parser.getFormatInstructions(),
     });
 
@@ -176,7 +175,7 @@ const genContractAi = async (req: Request, res: Response) => {
             answer: llmResponse.contractDescription,
           },
           {
-            Question: "What will be your project llmResponse?",
+            Question: "What will be your project budget?",
             answer: llmResponse.estimatedBudget,
           },
           {
