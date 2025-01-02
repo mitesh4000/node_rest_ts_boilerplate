@@ -1,14 +1,13 @@
 {
-  "name": "trust_to_pay_assignment",
+  "name": "node_rest_ts_boilerplate",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "biolerplate for node rest api with typescript to quickly build a backend",
+  "main": "dist/app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npx tsc",
+    "build": "npx tsc -W",
     "start": "node dist/app.js",
-    "dev": "nodemon  src/app.ts",
-    "swagger": "node ./src/swagger.js"
+    "dev": "NODE_ENV=development nodemon --exec ts-node src/app.ts"
   },
   "repository": {
     "type": "git",
@@ -45,11 +44,8 @@
     "@types/jsonwebtoken": "^9.0.7",
     "@types/morgan": "^1.9.9",
     "@types/node": "^22.10.1",
-    "@types/swagger-jsdoc": "^6.0.4",
-    "@types/swagger-ui-express": "^4.1.7",
     "@types/ws": "^8.5.13",
     "concurrently": "^9.1.0",
-    "nodemon": "^3.1.7",
     "swagger-autogen": "^2.23.7",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
