@@ -19,7 +19,7 @@ const io = new Server(server);
 const port = process.env.PORT;
 validateEnv();
 connectToDatabase();
-app.use(morgan("tiny"));
+app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.static(path.resolve("./src/public")));
 
