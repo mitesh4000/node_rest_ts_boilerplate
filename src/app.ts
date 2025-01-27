@@ -6,7 +6,7 @@ import path from "path";
 import { Server } from "socket.io";
 import { serverStatus } from "./controller/view.controller";
 import authRoutes from "./routes/auth.routes";
-import projectRoutes from "./routes/task.routes";
+import taskRoutes from "./routes/task.routes";
 import userRoutes from "./routes/user.routes";
 import { connectToDatabase } from "./utils/connectToDb";
 import { validateEnv } from "./utils/validateEnv";
@@ -26,7 +26,7 @@ app.use(express.static(path.resolve("./src/public")));
 app.get("/", serverStatus);
 app.use("/auth", authRoutes);
 app.use("/user", userRoutes);
-app.use("/", projectRoutes);
+app.use("/", taskRoutes);
 
 app.use((req, res) => {
   res.status(404).json({ error: "Route not found" });

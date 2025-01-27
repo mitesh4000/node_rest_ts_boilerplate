@@ -1,6 +1,19 @@
 import mongoose from "mongoose";
 import { z } from "zod";
 
+export const taskIputValidation = z.object({
+  title: z.string().min(3, "Title must be at least 3 characters long"),
+  description: z
+    .string()
+    .min(10, "Description must be at least 10 characters long"),
+  deadline: z
+    .string()
+    .date()
+    .refine((date) => new Date(date) > new Date(), {
+      message: "Deadline must be in the future",
+    }),
+});
+
 export const projectSchema = z
   .object({
     projectName: z
