@@ -1,17 +1,11 @@
 import { Request, Response } from "express";
 import { z } from "zod";
-import Contract from "../model/contract.model"; // Assuming you have a Contract model
 import Project from "../model/project.model";
 import { authRequest } from "../types/authRequest";
 import { projectSchema } from "../utils/validationSchemas";
 
 export const createProject = async (req: Request, res: Response) => {
   try {
-    const { contractId } = req.body;
-    const contract = await Contract.findById(contractId);
-    if (!contract) {
-      return res.status(404).json({ message: "Contract not found" });
-    }
     console.log(req.body);
     const validatedData = projectSchema.parse(req.body);
     const newProject = new Project(validatedData);
@@ -26,7 +20,6 @@ export const createProject = async (req: Request, res: Response) => {
         ),
       });
     }
-    console.error(error);
     const errorMessage =
       error instanceof Error ? error.message : "An unexpected error occurred";
     return res.status(500).json({ error: errorMessage });

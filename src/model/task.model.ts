@@ -1,86 +1,37 @@
+import { timeStamp } from "console";
+import { boolean, date } from "zod";
+
 const mongoose = require("mongoose");
 
 const taskSchema = new mongoose.Schema({
-  taskId: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-  taskName: {
+  title: {
     type: String,
     required: true,
   },
   description: {
     type: String,
-  },
-  priority: {
-    type: Number,
-    enum: ["low", "moderate", "heigh", "urgent"],
-    default: 3,
+    required:true
   },
   status: {
     type: String,
-    enum: ["not started", "in progress", "completed"],
-    default: "not started",
+    enum: ["pending", "in progress", "completed"],
+    default: "pending",
   },
-  dueDate: {
+  deadline: {
     type: Date,
     required: true,
   },
-  assignedTo: [
-    {
-      user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-      },
-      createdAt: {
-        type: Date,
-        default: Date.now,
-      },
-    },
-  ],
-  startDate: {
-    type: Date,
+  userId:{
+type:String,
+ref:"users"
   },
-  endDate: {
-    type: Date,
+  isDeleted:{
+    type:boolean,
+    default:false
   },
-  timeEstimate: {
-    type: Number,
-  },
-  timeTracking: {
-    type: Number,
-  },
-  progress: {
-    type: Number,
-    min: 0,
-    max: 100,
-  },
-  dependencies: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Task",
-    },
-  ],
-  tags: [
-    {
-      type: String,
-    },
-  ],
-  attachments: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Attachment",
-    },
-  ],
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-  updatedAt: {
-    type: Date,
-    default: Date.now,
-  },
-});
+  deletedAt:{
+    type:date
+  }
+},{timeStamp:true});
 
 module.exports = mongoose.model("Task", taskSchema);
